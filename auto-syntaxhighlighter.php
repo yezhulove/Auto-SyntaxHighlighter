@@ -13,7 +13,7 @@ class AutoSyntaxHighlighter {
 	private $_shlver = '3.0.83';
 	private $_settings = array();
 	private $_brushes = array();
-	private $_themes = 'default';
+	private $_themes = 'rdark';
 	private $_post_brushes = array();
 	private $_html_script = false; // for other SyntaxHighlighter plugins
 
@@ -22,11 +22,11 @@ class AutoSyntaxHighlighter {
 		// Register brush scripts
 		wp_register_script( 'ash_autoloader',		ASH_PLUGIN_URL.'SyntaxHighlighter/build/scripts/core-min.js',			false,				  $this->_shlver, true );
 		wp_register_script( 'ash_brush_xml',		ASH_PLUGIN_URL.'SyntaxHighlighter/build/scripts/shBrushXml-min.js',			array('ash_autoloader'),  $this->_shlver, true );
-//		wp_register_script( 'ash_autoloader',		ASH_PLUGIN_URL.'SyntaxHighlighter/build/scripts/shAutoloader.js',			array('ash_shcore'),	   $this->_shlver, true );
-//		wp_register_script( 'ash_brush_applescript',ASH_PLUGIN_URL.'SyntaxHighlighter/build/scripts/shBrushAppleScript.js',	array('ash_autoloader'), $this->_shlver, true );
-//		wp_register_script( 'ash_brush_xml',		ASH_PLUGIN_URL.'SyntaxHighlighter/build/scripts/shBrushXml.js',			array('ash_autoloader'), $this->_shlver, true );
-//		wp_register_script( 'ash_shcore',			ASH_PLUGIN_URL.'SyntaxHighlighter/build/scripts/shCore.js',				array('ash_xregexp'),	   $this->_shlver, true );
-//		wp_register_script( 'ash_xregexp',			ASH_PLUGIN_URL.'SyntaxHighlighter/build/scripts/XRegExp.js',				false, $this->_shlver, true );
+		//wp_register_script( 'ash_autoloader',		ASH_PLUGIN_URL.'SyntaxHighlighter/src/scripts/shAutoloader.js',			array('ash_shcore'),	   $this->_shlver, true );
+		//wp_register_script( 'ash_brush_applescript',ASH_PLUGIN_URL.'SyntaxHighlighter/src/scripts/shBrushAppleScript.js',	array('ash_autoloader'), $this->_shlver, true );
+		//wp_register_script( 'ash_brush_xml',		ASH_PLUGIN_URL.'SyntaxHighlighter/src/scripts/shBrushXml.js',			array('ash_autoloader'), $this->_shlver, true );
+		//wp_register_script( 'ash_shcore',			ASH_PLUGIN_URL.'SyntaxHighlighter/src/scripts/shCore.js',				array('ash_xregexp'),	   $this->_shlver, true );
+		//wp_register_script( 'ash_xregexp',			ASH_PLUGIN_URL.'SyntaxHighlighter/src/scripts/XRegExp.js',				false, $this->_shlver, true );
 
 		// Register theme stylesheets
 		wp_register_style(  'ash_core',				ASH_PLUGIN_URL.'SyntaxHighlighter/build/styles/shCore-min.css',				array(),		   $this->_shlver );
@@ -38,6 +38,8 @@ class AutoSyntaxHighlighter {
 		wp_register_style(  'ash_theme_mdultra',	ASH_PLUGIN_URL.'SyntaxHighlighter/build/styles/shThemeMDUltra-min.css',		array('ash_core'), $this->_shlver );
 		wp_register_style(  'ash_theme_midnight',	ASH_PLUGIN_URL.'SyntaxHighlighter/build/styles/shThemeMidnight-min.css',	array('ash_core'), $this->_shlver );
 		wp_register_style(  'ash_theme_rdark',		ASH_PLUGIN_URL.'SyntaxHighlighter/build/styles/shThemeRDark-min.css',		array('ash_core'), $this->_shlver );
+		wp_register_style(  'ash_core_asm',		ASH_PLUGIN_URL.'SyntaxHighlighter/build/styles/shCoreAsm-min.css',		array('ash_core'), $this->_shlver );
+		
 
 		$this->_brushes = apply_filters('ash_brushes',array(
 			array('applescript', 'shBrushAppleScript-min.js'),
@@ -65,6 +67,7 @@ class AutoSyntaxHighlighter {
 			array('sql', 'shBrushSql-min.js'),
 			array('vb vbnet', 'shBrushVb-min.js'),
 			array('xml xhtml xslt html', 'shBrushXml-min.js'),
+			array('asm masn od ida', 'shBrushAsm-min.js'),
 		));
 		add_filter('the_content', array($this, 'getContentLang'));
 		add_action('wp_footer', array($this,'outputScripts'));
@@ -94,6 +97,7 @@ class AutoSyntaxHighlighter {
 		else
 			wp_print_scripts('ash_brush_xml');
 		wp_print_styles('ash_theme_'.$this->_themes);
+		wp_print_styles('ash_core_asm');
 		?>
 <script type='text/javascript'>
 SyntaxHighlighter.autoloader(
@@ -151,6 +155,7 @@ class WpAsh {
 			add_action('admin_notices', create_function('', 'echo \'<div id="message" class="error fade"><p><strong>Sorry, The Wordpress Plugins "Auto Syntax Highlighter" works only under WordPress 2.6 or higher.</strong></p></div>\';'));
 			return;
 		} else {
+			
 			include_once (plugin_basename('/tinymce/tinymce.php'));
 			
 			// Filters for editor, save pre "class"
@@ -165,4 +170,4 @@ class WpAsh {
 	
 }
 
-add_action( 'plugins_loaded', create_function( '', '$wpash = new WpAsh;' ) );
+//add_action( 'plugins_loaded', create_function( '', '$wpash = new WpAsh;' ) );
